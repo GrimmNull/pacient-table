@@ -61,6 +61,26 @@
     }
   }
 
+  .uploadCSVWrapper {
+    display: flex;
+    align-items: center;
+    border: 1px dashed #000;
+    width: max-content;
+    margin-inline: auto;
+    border-radius: 14px;
+
+    label {
+      font-size: 20px;
+      padding: 1vw 2vw;
+      cursor: pointer;
+
+    }
+
+    input {
+      display: none;
+    }
+  }
+
 
   .table {
     display: flex;

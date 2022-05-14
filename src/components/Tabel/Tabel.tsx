@@ -37,6 +37,7 @@ export const Tabel: FunctionComponent = () => {
 
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files![0];
+        setCsv(file.name);
         const reader = new FileReader();
         reader.onload = () => {
             const csv = reader.result as string;
@@ -191,7 +192,7 @@ export const Tabel: FunctionComponent = () => {
         </div>
 
         <div className={styles.uploadCSVWrapper}>
-            <label htmlFor={"uploadCSV"}>Upload a csv file</label>
+            <label htmlFor={"uploadCSV"}>{csv !== "" ? csv : "Upload a csv file"}</label>
             <input type="file" id={"uploadCSV"} onChange={handleFileUpload} />
         </div>
 
