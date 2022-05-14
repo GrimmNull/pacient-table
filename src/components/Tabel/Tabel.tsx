@@ -19,6 +19,7 @@ interface Row {
 
 export const Tabel: FunctionComponent = () => {
     const [rows, setRows] = useState<Row[]>([]);
+    const [csv, setCsv] = useState<string>('');
     const [useLocalStorage, setUseLocalStorage] = useState(false);
     const initialValues = {
         pacient: '',
@@ -32,6 +33,41 @@ export const Tabel: FunctionComponent = () => {
             diagnosis: values.diagnosis,
             treatment: values.treatment,
         }]);
+    }
+
+    const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files![0];
+        const reader = new FileReader();
+        reader.onload = () => {
+            const csv = reader.result as string;
+            const data = csv?.replaceAll(" ","").split(/\r?\n/).map(row => row.split(','));
+            // setRows(data);
+            console.log(data);
+            let tempRow: Row = {
+                pacient: '',
+                diagnosis: [],
+                treatment: [],
+            };
+            const csvRows: Row[] = [];
+            data.forEach((row, index) => {
+                if (index === 0) {
+                    return;
+                }
+                if (row[0] === '') {
+                    row[1] !== "" && tempRow.diagnosis.push(row[1]);
+                    row[2] !== "" && tempRow.treatment.push(row[2]);
+                }
+                if (row[0] !== '') {
+                    tempRow.pacient !== "" && csvRows.push({...tempRow});
+                    tempRow.pacient = row[0];
+                    tempRow.diagnosis = [row[1]];
+                    tempRow.treatment = [row[2]];
+                }
+                index === data.length - 1 && csvRows.push({...tempRow});
+            });
+            setRows(csvRows);
+        }
+        reader.readAsText(file);
     }
 
     useEffect(() => {
@@ -152,6 +188,11 @@ export const Tabel: FunctionComponent = () => {
             Salveaza datele in localStorage pentru a putea fi accesate mai tarziu: <div
             className={clsx(styles.localStorageFlag, {[styles.active]: useLocalStorage})}
             onClick={() => setUseLocalStorage(!useLocalStorage)}/>
+        </div>
+
+        <div className={styles.uploadCSVWrapper}>
+            <label htmlFor={"uploadCSV"}>Upload a csv file</label>
+            <input type="file" id={"uploadCSV"} onChange={handleFileUpload} />
         </div>
 
         <div className={styles.table}>
