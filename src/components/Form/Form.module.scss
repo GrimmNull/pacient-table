@@ -55,9 +55,10 @@
   margin-inline: auto;
   margin-top: 1vw;
   padding: 0.5vw 0.8vw;
-  background: white;
   border-radius: 24px;
   cursor: pointer;
+  background: transparent;
+  border: 1px solid white;
 }
 
 .visible {
